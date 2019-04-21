@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <windows.h>
 #include <ctime> 
+#include<iostream>
 int main(int argc, char** argv[])
 {	
 	srand(time(NULL)); 	
@@ -39,8 +40,14 @@ int main(int argc, char** argv[])
 			else			
 			{				
 				printf("From Client: data = %s, size = %d\n", buf, rlen);				
-				char wbuf[256] = "";				
-				sprintf(wbuf, "%s%d", wbuf, rand()%1000);				
+				char wbuf[256] = "\0";				
+				//sprintf(wbuf, "%s%d", wbuf, rand()%1000);
+				std::cout << "To Client:" << std::endl;
+				std::cin >> wbuf;
+				if(strcmp(wbuf,"q")==0)
+				{
+					break;
+				}
 				DWORD wlen = 0;				
 				WriteFile(hPipe, wbuf, sizeof(wbuf), &wlen, 0);	//向客户端发送内容				
 				printf("To Client: data = %s, size = %d\n", wbuf, wlen);				

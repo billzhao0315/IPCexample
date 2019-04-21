@@ -1,6 +1,7 @@
 ﻿#include <stdio.h>
 #include <windows.h>
 #include <ctime> 
+#include<iostream>
 int main(int argc, char** argv[])
 {	
 	srand(time(NULL)); 	
@@ -30,8 +31,14 @@ int main(int argc, char** argv[])
 	{		
 		while(true)		
 		{			
-			char buf[256] = "";			
-			sprintf(buf,"%s%d",buf,rand()%1000);			
+			char buf[256] = "\0";			
+			//sprintf(buf,"%s%d",buf,rand()%1000);
+			std::cout << "To Server: "<<std::endl;
+			std::cin >> buf;
+			if(strcmp(buf,"q")==0)
+			{
+				break;
+			}
 			if(WriteFile(hPipe,buf,sizeof(buf),&wlen,0)==FALSE)	//向服务器发送内容			
 			{
 				printf("write to pipe failed!\n");				
@@ -40,7 +47,7 @@ int main(int argc, char** argv[])
 			else			
 			{				
 				printf("To Server: data = %s, size = %d\n", buf, wlen);				
-				char rbuf[256] = "";				
+				char rbuf[256] = "";
 				DWORD rlen = 0;				
 				ReadFile(hPipe, rbuf, sizeof(rbuf), &rlen, 0);	//接受服务发送过来的内容				
 				printf("From Server: data = %s, size = %d\n", rbuf, rlen);			
